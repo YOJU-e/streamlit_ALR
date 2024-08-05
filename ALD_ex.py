@@ -4,6 +4,7 @@ import pandas as pd
 import os
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -14,6 +15,16 @@ import pandas as pd
 import csv
 import time # 페이지 로딩을 기다리는데에 사용할 time 모듈 import
 import sqlite3
+
+def get_chrome_driver():
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--disable-gpu")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_service = Service(ChromeDriverManager().install())
+    driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
+    return driver
 
 def is_leap_year(year):
     # 윤년 계산
@@ -1093,6 +1104,12 @@ def main():
     e_month = today_date.strftime('%B') #July
     t_month = today_date.month
     t_year = today_date.year
+
+    if st.button('Run Selenium'):
+        driver = get_chrome_driver()
+        driver.get("https://apps.ucsiuniversity.edu.my/enquiry/resultLogin.aspx")
+        # st.write("Page title: ", driver.title)
+        driver.quit()
     
     if 'updated' not in st.session_state:
         st.session_state.updated = False
