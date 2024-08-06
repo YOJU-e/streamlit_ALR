@@ -186,7 +186,7 @@ def crawling (selected_option,tempt_from, tempt_to, download_dir):
         # WebDriver 종료
         driver.quit()
 
-def get_data (o,t_year,t_month,download_dir):
+def get_data (o,t_year,download_dir):
     df = pd.DataFrame()
     for y in range(2022,t_year+1):   #이거 바꿔야함 !!!!!!!!!!!!!!
         # print(y)
@@ -682,12 +682,12 @@ def initialize_setup(option_file_path,download_dir):
         df_12 = pd.DataFrame()
         for o in options:
             if o == '1. Faculty Programme Page Enquiry Form':
-                df_1 = get_data(o,t_year,t_month,download_dir)
+                df_1 = get_data(o,t_year,download_dir)
                 # df_1.to_excel('1_data.xlsx', index=False)
                 df_12 = pd.concat([df_12,df_1],ignore_index=True)
                 print("")
             elif o == '2. Individual Programme Page Enquiry Form': # 2번 실행시 1~6이 용량이 만항서 실행이 안됌
-                df_2 = get_data(o,t_year,t_month,download_dir) 
+                df_2 = get_data(o,t_year,download_dir) 
                 df_12 = pd.concat([df_12,df_2],ignore_index=True)                                  
                 df_12_cleared = unique_rows_p(df_12)
 
@@ -710,7 +710,7 @@ def initialize_setup(option_file_path,download_dir):
                         conn.close()
                         
             elif o == '3. Masters & PhD Programme':
-                df_3 = get_data(o,t_year,t_month,download_dir) 
+                df_3 = get_data(o,t_year,download_dir) 
                 df_3_cleared = unique_rows_p(df_3)
 
                 year_groups = df_3_cleared.groupby('Year')
@@ -729,7 +729,7 @@ def initialize_setup(option_file_path,download_dir):
                         conn.close()
                         
             elif o == '4. General Scholarship':
-                df_4 = get_data(o,t_year,t_month,download_dir) 
+                df_4 = get_data(o,t_year,download_dir) 
                 df_4_cleared = unique_rows_(df_4)  #Programme 없음 주의
                 year_groups = df_4_cleared.groupby('Year')
                 for year, year_df in year_groups:
@@ -747,7 +747,7 @@ def initialize_setup(option_file_path,download_dir):
                         conn.close()
                         
             elif o == '5. Foundation ONLY Landing Page':
-                df_5 = get_data(o,t_year,t_month,download_dir) 
+                df_5 = get_data(o,t_year,download_dir) 
                 df_5_cleared = unique_rows_p(df_5)
                 year_groups = df_5_cleared.groupby('Year')
                 for year, year_df in year_groups:
@@ -765,7 +765,7 @@ def initialize_setup(option_file_path,download_dir):
                         conn.close()
                         
             elif o == '6. Foundation & Diploma Landing Page':
-                df_6 = get_data(o,t_year,t_month,download_dir) 
+                df_6 = get_data(o,t_year,download_dir) 
                 df_6_cleared = unique_rows_p(df_6)
                 year_groups = df_6_cleared.groupby('Year')
                 for year, year_df in year_groups:
@@ -783,7 +783,7 @@ def initialize_setup(option_file_path,download_dir):
                         conn.close()
                         
             elif o == '7. MARA Scholar':
-                df_7 = get_data(o,t_year,t_month,download_dir) 
+                df_7 = get_data(o,t_year,download_dir) 
                 df_7_cleared = unique_rows_p(df_7)
                 year_groups = df_7_cleared.groupby('Year')
                 for year, year_df in year_groups:
@@ -801,7 +801,7 @@ def initialize_setup(option_file_path,download_dir):
                         conn.close()
                         
             elif o == '8. Open Day':
-                df_8 = get_data(o,t_year,t_month,download_dir) 
+                df_8 = get_data(o,t_year,download_dir) 
                 df_8_cleared = unique_rows_p(df_8)
                 year_groups = df_8_cleared.groupby('Year')
                 for year, year_df in year_groups:
@@ -819,7 +819,7 @@ def initialize_setup(option_file_path,download_dir):
                         conn.close()    
                         
             elif o == '10. UEC Study Grants (English Version)':
-                df_10 = get_data(o,t_year,t_month,download_dir) 
+                df_10 = get_data(o,t_year,download_dir) 
                 df_10_cleared = unique_rows_p(df_10)
                 year_groups = df_10_cleared.groupby('Year')
                 for year, year_df in year_groups:
@@ -837,7 +837,7 @@ def initialize_setup(option_file_path,download_dir):
                         conn.close()
                         
             elif o == '11. Info Day & Enrolment Day':  
-                df_11 = get_data(o,t_year,t_month,download_dir) 
+                df_11 = get_data(o,t_year,download_dir) 
                 df_11_cleared = unique_rows_p(df_11)
                 year_groups = df_11_cleared.groupby('Year')
                 for year, year_df in year_groups:
@@ -1093,9 +1093,9 @@ def main():
     t_year = today_date.year
 
     if st.button('Run Selenium'):
-        driver = get_chrome_driver()
+        driver = get_driver()
         driver.get("https://apps.ucsiuniversity.edu.my/enquiry/resultLogin.aspx")
-        # st.write("Page title: ", driver.title)
+        st.write("Page title: ", driver.title)
         driver.quit()
     
     if 'updated' not in st.session_state:
