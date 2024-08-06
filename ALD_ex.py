@@ -22,8 +22,8 @@ def get_driver():
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--no-sandbox")
     
-    service = Service(ChromeDriverManager().install())
-    driver = webdriver.Chrome(service=service, options=chrome_options)
+    service = Service(ChromeDriverManager().install())  # ChromeDriverManager().install: 최신 다운로드 및 설치, 설치된 ChromeDriver 경로 반환
+    driver = webdriver.Chrome(service=service, options=chrome_options) #initialization
     return driver
 
 def is_leap_year(year):
@@ -40,24 +40,11 @@ def get_last_day_of_month(year, month):
         return 29 if is_leap_year(year) else 28
 
 def crawling (selected_option,tempt_from, tempt_to, download_dir):
-
-    # ChromeDriver 경로를 지정; Chrome최신버전: 126.0.6478.127 (64비트)
-    chrome_driver_path = "C:/vscode/chromedriver-win64/chromedriver.exe"
-
-    # ChromeOptions 객체를 생성합니다.
-    chrome_options = Options()
-    
-    # Selenium 설정 (헤드리스 모드)
-    # chrome_options.add_argument("--headless")
-    # chrome_options.add_argument("--disable-gpu")
-    # chrome_options.add_argument("--no-sandbox")
-    # chrome_options.add_argument("--disable-dev-shm-usage")
-
-    # WebDriver 서비스를 설정합니다.
-    service = Service(chrome_driver_path)
-
-    # WebDriver를 초기화합니다.
-    driver = webdriver.Chrome(service=service, options=chrome_options)
+    # chrome_driver_path = "C:/vscode/chromedriver-win64/chromedriver.exe"    # ChromeDriver 경로 지정
+    # chrome_options = Options()  # ChromeOptions 객체 생성
+    # service = Service(chrome_driver_path)
+    # driver = webdriver.Chrome(service=service, options=chrome_options)  # WebDriver 초기화
+    driver = get_driver()
 
     # 웹 페이지를 엽니다.
     driver.get("https://apps.ucsiuniversity.edu.my/enquiry/resultLogin.aspx")
