@@ -21,6 +21,10 @@ def get_driver():
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+
+     # For Chromium
+    chrome_options.binary_location = '/usr/bin/chromium'
     
     service = Service(ChromeDriverManager().install())  # ChromeDriverManager().install: 최신 다운로드 및 설치, 설치된 ChromeDriver 경로 반환
     driver = webdriver.Chrome(service=service, options=chrome_options) #initialization
