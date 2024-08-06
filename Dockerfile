@@ -1,23 +1,14 @@
 # 베이스 이미지 선택
 FROM python:3.8-slim
 
-# 시스템 패키지 설치
-COPY packages.txt /tmp/packages.txt
+# 필요한 패키지 설치
 RUN apt-get update && \
-    apt-get install -y wget unzip && \
-    apt-get install -y chromium-browser chromium-driver && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get install -y wget unzip
 
-# 시스템 패키지 업데이트 및 필수 패키지 설치
-RUN apt-get update && \
-    apt-get install -y wget unzip gnupg && \
+# 특정 버전의 chromium-browser와 chromium-driver 설치
+RUN apt-get install -y chromium-browser=90.0.4430.93-0ubuntu0.20.04.1 && \
+    apt-get install -y chromium-chromedriver=90.0.4430.93-0ubuntu0.20.04.1 && \
     rm -rf /var/lib/apt/lists/*
-
-# Chromium 및 Chromedriver 설치
-RUN apt-get update && \
-    apt-get install -y chromium chromium-driver && \
-    rm -rf /var/lib/apt/lists/*
-
 
 # Python 패키지 설치
 COPY requirements.txt /tmp/requirements.txt
