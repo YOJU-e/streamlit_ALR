@@ -3,12 +3,15 @@ import sqlite3
 import pandas as pd
 import os
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.options import Options
+from webdriver_manager.core.os_manager import ChromeType
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+
+
 from bs4 import BeautifulSoup
 import streamlit as st
 import pandas as pd
@@ -16,6 +19,7 @@ import csv
 import time # 페이지 로딩을 기다리는데에 사용할 time 모듈 import
 import sqlite3
 
+@st.cache_resource
 def get_driver():
     chrome_options = Options()
     chrome_options.add_argument("--headless")
@@ -23,10 +27,12 @@ def get_driver():
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
 
-     # For Chromium
-    chrome_options.binary_location = '/usr/bin/chromium'
-    
-    service = Service(ChromeDriverManager().install())  # ChromeDriverManager().install: 최신 다운로드 및 설치, 설치된 ChromeDriver 경로 반환
+    # For Chromium
+    # chrome_options.binary_location = '/usr/bin/chromium'
+    service = Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())  # ChromeDriverManager().install: 최신 다운로드 및 설치, 설치된 ChromeDriver 경로 반환
+    options = Options()
+    options.add_argument("--disable-gpu")
+    options.add_argument("--headless")
     driver = webdriver.Chrome(service=service, options=chrome_options) #initialization
     return driver
 
