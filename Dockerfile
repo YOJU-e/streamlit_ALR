@@ -4,9 +4,7 @@ FROM python:3.8-slim
 # 시스템 패키지 설치
 COPY packages.txt /tmp/packages.txt
 RUN apt-get update && \
-    while read package; do \
-        apt-get install -y $package; \
-    done < /tmp/packages.txt && \
+    apt-get install -y $(cat /tmp/packages.txt) && \
     rm -rf /var/lib/apt/lists/*
 
 # Python 패키지 설치
