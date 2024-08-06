@@ -20,11 +20,10 @@ RUN apt-get update \
     git \
     curl \
     python3-dev
-    
+
 # 필요한 패키지 설치
 RUN apt-get update && \
-    apt-get install -y wget unzip gnupg && \
-    apt-get install -y software-properties-common
+    apt-get install -y wget unzip gnupg
 
 # Chromium 저장소 추가 및 패키지 설치
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
@@ -41,13 +40,14 @@ RUN wget https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_
 
 WORKDIR /app
 
-# if we have a packages.txt, install it
+# 패키지 설치를 위한 packages.txt 복사 및 설치
 COPY packages.txt packages.txt
-RUN xargs -a packages.txt apt-get install --yes
+RUN apt-get update && xargs -a packages.txt apt-get install --yes
 
+# Python 패키지 설치
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel uv
 COPY requirements.txt requirements.txt
-RUN uv pip install --system --no-cache -r requirements.txt
+RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
 EXPOSE 8501
 
@@ -59,7 +59,5 @@ COPY . .
 CMD ["streamlit", "run", "ALD_ex.py"]
 
 # docker build --progress=plain --tag streamlit-selenium:latest .
-# docker run -ti -p 8501:8501 --rm streamlit-selenium:latest /bin/bash
 # docker run -ti -p 8501:8501 --rm streamlit-selenium:latest
 # docker run -ti -p 8501:8501 -v ${pwd}:/app --rm streamlit-selenium:latest
-# docker run -ti -p 8501:8501 -v ${pwd}:/app --rm streamlit-selenium:latest /bin/
