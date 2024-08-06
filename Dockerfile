@@ -1,5 +1,5 @@
 # this base image seems to be quite similar to the streamlit cloud environment
-FROM python:3.11-slim-bullseye
+FROM python:3.8-slim-bullseye
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
@@ -11,6 +11,8 @@ ENV PYTHONUNBUFFERED=1 \
 
 # we need some build tools for installing additional python pip packages
 RUN apt-get update \
+    && xargs -a packages.txt apt-get install --yes && \
+    && rm -rf /var/lib/apt/lists/*
     && apt-get install --yes \
     software-properties-common \
     build-essential \
