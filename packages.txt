@@ -1,4 +1,2 @@
-wget
-unzip
-gnupg
-software-properties-common
+chromium
+chromium-driver
