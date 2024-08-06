@@ -1,5 +1,5 @@
-streamlit
-pandas
-selenium
-webdriver-manager
-beautifulsoup4
+selenium==4.23.1
+webdriver-manager==4.0.2
+beautifulsoup4==4.10.0
+pandas==1.3.3
+streamlit==1.11.0
