@@ -1,6 +1,5 @@
 selenium
 webdriver-manager
-beautifulsoup4
 pandas
 pandas-datareader
 streamlit
