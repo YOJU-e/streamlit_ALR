@@ -1,43 +1,25 @@
-# this base image seems to be quite similar to the streamlit cloud environment
-FROM python:3.8-slim-bullseye
+# 베이스 이미지 선택
+FROM python:3.8-slim
 
-ENV PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1 \
-    PIP_NO_CACHE_DIR=1 \
-    PIP_DISABLE_PIP_VERSION_CHECK=1 \
-    PIP_DEFAULT_TIMEOUT=120 \
-    LC_ALL=C.UTF-8 \
-    LANG=C.UTF-8
+# 시스템 패키지 설치
+COPY packages.txt /tmp/packages.txt
+RUN apt-get update && \
+    while read package; do \
+        apt-get install -y $package; \
+    done < /tmp/packages.txt && \
+    rm -rf /var/lib/apt/lists/*
 
-# we need some build tools for installing additional python pip packages
-RUN apt-get update \
-    && xargs -a packages.txt apt-get install --yes && \
-    && rm -rf /var/lib/apt/lists/*
-    && apt-get install --yes \
-    software-properties-common \
-    build-essential \
-    gcc \
-    g++ \
-    cmake \
-    git \
-    curl \
-    python3-dev
+# Python 패키지 설치
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install -r /tmp/requirements.txt
 
+# 환경 변수 설정
+ENV PATH="/usr/lib/chromium:${PATH}"
+ENV CHROMIUM_BIN="/usr/bin/chromium"
+
+# 앱 파일 복사 및 작업 디렉토리 설정
+COPY . /app
 WORKDIR /app
 
-# if we have a packages.txt, install it
-COPY packages.txt packages.txt
-RUN xargs -a packages.txt apt-get install --yes
-
-RUN pip install --no-cache-dir --upgrade pip setuptools wheel uv
-COPY requirements.txt requirements.txt
-RUN uv pip install --system --no-cache -r requirements.txt
-
-EXPOSE 8501
-
-HEALTHCHECK --interval=1m --timeout=20s \
-    CMD curl --fail http://localhost:8501/_stcore/health
-
-COPY . .
-
-CMD ["streamlit", "run", "ALD_ex.py.py"]
+# 스트림릿 앱 실행
+CMD ["streamlit", "run", "ALD_ex.py"]
